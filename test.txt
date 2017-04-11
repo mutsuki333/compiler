@@ -1,0 +1,16 @@
+Int a = 6;
+DoUBle b = 9.0;
+IF(a!=b)a=a+5;
+else a = b^2;
+
+int i = 0;
+while (i <= 20){
+	a = a % i;
+	b = b /i;
+}
+// "I am /*in a*/ comment*/.
+print("test test test test","again again again"); /* This is // the 
+//end of the /* test.
+*/
+
+

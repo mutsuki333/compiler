@@ -46,7 +46,6 @@
 letter [a-zA-Z]
 digit [0-9]
 id {letter}+({letter}|{digit})*
-string ["][^"]*["]
 number {digit}+
 float {number}+"."{number}+
 int [iI][nN][tT]
@@ -57,25 +56,33 @@ if [iI][fF]
 else [eE][lL][sS][eE]
 Lcomment ("//"[^\n]*\n)
 
-%x Comment
+%x Comment String
 %%
 
  /*	Rules section */
 
 ";" 				{printf("%s \t SEMICOLON \n",yytext); }
+"," 				{printf("%s \t COMMA \n",yytext); }
 "="					{printf("%s \t ASSIGN \n",yytext);}
 "("					{printf("%s \t LB \n",yytext);}
 ")"					{printf("%s \t RB \n",yytext);}
 {print}     {printf("%s \t PRINT FUNCTION \n",yytext);}
 "/*"				{printf("start comments\n%s",yytext);BEGIN Comment;}
-<Comment>[^(\*/)]"*/" {printf("%s",yytext);BEGIN 0;}
-{Lcomment}				{printf("start comments\n%s",yytext);}
-[\+\-\*\/%\^] 	{printf("%s \t OPERATOR \n",yytext);}
+<Comment>[^(\*/)]*"*/" {printf("%s\n",yytext);BEGIN 0;}
+{Lcomment}				{printf("start comments\n%s\n",yytext);}
+\+				 	{printf("%s \t OPERATOR ADD \n",yytext);}
+\-				 	{printf("%s \t OPERATOR MINUS \n",yytext);}
+\*				 	{printf("%s \t OPERATOR MULTI \n",yytext);}
+\/				 	{printf("%s \t OPERATOR DIVISION \n",yytext);}
+\^				 	{printf("%s \t OPERATOR EXPO \n",yytext);}
+"%"				 	{printf("%s \t OPERATOR REMAINDER \n",yytext);}
 ([><]=?)|([=!]=)			{printf("%s \t RELATIONAL \n",yytext);}
 {int}     	{declare=INT;}
 {double}    {declare=DOUBLE;}
 {while}    {printf("%s \t WHILE FUNCTION \n",yytext);}
-{string}    {printf("%s \t STRING \n",yytext);}
+\"				 {printf("%s \t QUOTATION \n",yytext); BEGIN String;}
+<String>[^"]* {printf("%s \t STRING \n",yytext);}
+<String>\" {printf("%s \t QUOTATION \n",yytext); BEGIN 0;}
 {if}    {printf("%s \t IF FUNCTION \n",yytext);}
 {else}    {printf("%s \t ELSE FUNCTION \n",yytext);}
 {id} 				{if(declare==nill)
@@ -89,7 +96,7 @@ Lcomment ("//"[^\n]*\n)
 						}
 {digit}+		{printf("%s \t NUMBER \n",yytext);}
 {float}     {printf("%s \t FLOATNUMBER \n",yytext);}
-[.]*				;
+[{}]*				;
 [ \t]				;
 [\n]				{++linenum;}
 <Comment>[\n] {printf("%s",yytext);++linenum;}

@@ -5,7 +5,7 @@ int temp;
 
 while(i < 10)
 {
-	temp = sum;   
+	temp = sum;
 	sum = last + sum;
 	last = temp;
 }

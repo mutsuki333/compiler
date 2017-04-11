@@ -31,13 +31,13 @@
 	};
 
 	Type declare=nill;
-	struct SymbolTable* start=NULL;
+	struct SymbolTable *start=NULL, *new, *last;
 
 	void create_symbol();
 	void insert_symbol(char*, Type);
 	int lookup_symbol(char*);
 	void dump_symbol();
-	int linenum = 0;
+	int linenum = 1;
 
 %}
 
@@ -46,12 +46,15 @@
 letter [a-zA-Z]
 digit [0-9]
 id {letter}+({letter}|{digit})*
+string ["][^"]*["]
 number {digit}+
 float {number}+"."{number}+
 int [iI][nN][tT]
 double [dD][oO][uU][bB][lL][eE]
 print [pP][rR][iI][nN][tT]
 while [wW][hH][iI][lL][eE]
+if [iI][fF]
+else [eE][lL][sS][eE]
 Lcomment ("//"[^\n]*\n)
 
 %x Comment
@@ -72,12 +75,16 @@ Lcomment ("//"[^\n]*\n)
 {int}     	{declare=INT;}
 {double}    {declare=DOUBLE;}
 {while}    {printf("%s \t WHILE FUNCTION \n",yytext);}
+{string}    {printf("%s \t STRING \n",yytext);}
+{if}    {printf("%s \t IF FUNCTION \n",yytext);}
+{else}    {printf("%s \t ELSE FUNCTION \n",yytext);}
 {id} 				{if(declare==nill)
 							printf("%s \t ID \n",yytext);
 						else{
 							char* a;
 							if(declare==DOUBLE)a="double";else a="int";
 							printf("%s \t %s TYPE VAR \n",yytext,a);
+							insert_symbol(yytext, declare);
 						declare = nill;}
 						}
 {digit}+		{printf("%s \t NUMBER \n",yytext);}
@@ -85,7 +92,7 @@ Lcomment ("//"[^\n]*\n)
 [.]*				;
 [ \t]				;
 [\n]				{++linenum;}
-<Comment>[\n] {printf("%s",yytext);++linenum}
+<Comment>[\n] {printf("%s",yytext);++linenum;}
 
 
 %%
@@ -109,20 +116,55 @@ int yywrap(void) {
 }
 
 void create_symbol(){
-	printf("Create a symbol table");
-	start = (stuct SymbolTable *)malloc(sizeof(struct SymbolTable));
-	start->next = NULL;
+	printf("Create a symbol table\n");
+	new = (struct SymbolTable *)malloc(sizeof(struct SymbolTable));
+	start = new;
+	new->next = NULL;
+	last = new;
 }
 
 void insert_symbol(char* s, Type t){
-	if(start==NULL)create_symbol();
-	if(lookup_symbol(s))
+	if(start==NULL){
+		create_symbol();
+		printf("Insert a symbol: %s\n", s);
+		new->index=0;
+		new->type=t;
+		new->id = malloc(strlen(s)+1);
+		strcpy(new->id, s);
+	}
+	else if(lookup_symbol(s)){
+		printf("Insert a symbol: %s\n", s);
+		new = (struct SymbolTable *)malloc(sizeof(struct SymbolTable));
+		new->index=last->index+1;
+		new->type=t;
+		new->id = malloc(strlen(s)+1);
+		strcpy(new->id, s);
+		last->next = new;
+		new->next = NULL;
+		last = new;
+	}
 }
 
 int lookup_symbol(char* sym){
-
+	struct SymbolTable *tmp;
+	tmp = start;
+	while(tmp!=NULL){
+		if(strcmp(tmp->id,sym)==0)return tmp->index;
+		tmp=tmp->next;
+	}
+	return -1;
 }
 
 void dump_symbol(){
-
+	printf("\nThe symbol table dump:\n");
+	struct SymbolTable *tmp, *tmp1;
+	tmp = start;
+	while(tmp!=NULL){
+		char* a;
+		if(tmp->type==DOUBLE)a="double";else a="int";
+		printf("%i \t %s \t %s\n", tmp->index, tmp->id, a);
+		tmp1 = tmp;
+		tmp=tmp->next;
+		free(tmp1);
+	}
 }

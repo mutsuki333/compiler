@@ -21,13 +21,13 @@ space		[ ]
 %%
 
 "//".+\n						{ yylineno++;}
-"/*"(.+\n?)*"*/"				{ 	
+"/*"(.+\n?)*"*/"				{
 									char* t = strtok(yytext,"\n");
 									while( t != NULL ) {
 						  				yylineno++;
 						  				t = strtok(NULL, "\n");
 									}
-									yylineno --;
+									yylineno--;
 								}
 
 "("								{ return LB;}
@@ -42,11 +42,11 @@ space		[ ]
 ([Ww][Hh][Ii][Ll][Ee])			{ return WHILE;}
 ([Ii][Nn][Tt])					{ return INT;}
 ([Dd][Oo][Uu][Bb][Ll][Ee])		{ return DOUBLE;}
-[\n]							{ yylineno++;}
-"\"".+"\""						{return STRING;}
-{num}							{return NUMBER;}
-{floatnum} 						{return FLOATNUM;}
-{id}							{return ID;}
+[\n]							{return '\n';}
+"\"".+"\""						{yylval.str = strdup(yytext);return STRING;}
+{num}							{yylval.intNum = atoi(yytext);return NUMBER;}
+{floatnum} 						{yylval.doubleNum = atof(yytext);return FLOATNUM;}
+{id}							{yylval.str = strdup(yytext);return ID;}
 [ \t]							{;} /* Ignore */
 [^ \n\t] 						{;} /* Ignore other charactor sets */
 %%
@@ -55,5 +55,3 @@ int yywrap()
 {
     return 1;
 }
-
-

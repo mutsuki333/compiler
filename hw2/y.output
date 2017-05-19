@@ -1,0 +1,591 @@
+Terminals unused in grammar
+
+   WHILE
+
+
+State 1 conflicts: 9 shift/reduce
+State 12 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: Prog $end
+
+    1 Prog: %empty
+    2     | Prog Line
+    3     | Prog Stmt Line
+
+    4 Line: '\n'
+    5     | %empty
+
+    6 Stmt: Print SEM
+    7     | Decl SEM
+    8     | Assign SEM
+    9     | Arith SEM
+
+   10 Decl: INT ID
+   11     | DOUBLE ID
+   12     | INT ID ASSIGN Arith
+   13     | DOUBLE ID ASSIGN Arith
+
+   14 Assign: ID ASSIGN Arith
+
+   15 Arith: Term
+   16      | Arith ADD Term
+   17      | Arith SUB Term
+
+   18 Term: Factor
+   19     | Term MUL Factor
+   20     | Term DIV Factor
+
+   21 Factor: Group
+   22       | NUMBER
+   23       | FLOATNUM
+   24       | ID
+
+   25 Print: PRINT Group
+   26      | PRINT LB STRING RB
+
+   27 Group: LB Arith RB
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'\n' (10) 4
+error (256)
+SEM (258) 6 7 8 9
+PRINT (259) 25 26
+WHILE (260)
+INT (261) 10 12
+DOUBLE (262) 11 13
+LB (263) 26 27
+RB (264) 26 27
+STRING (265) 26
+ADD (266) 16
+SUB (267) 17
+MUL (268) 19
+DIV (269) 20
+ASSIGN (270) 12 13 14
+NUMBER (271) 22
+FLOATNUM (272) 23
+ID (273) 10 11 12 13 14 24
+
+
+Nonterminals, with rules where they appear
+
+$accept (20)
+    on left: 0
+Prog (21)
+    on left: 1 2 3, on right: 0 2 3
+Line (22)
+    on left: 4 5, on right: 2 3
+Stmt (23)
+    on left: 6 7 8 9, on right: 3
+Decl (24)
+    on left: 10 11 12 13, on right: 7
+Assign (25)
+    on left: 14, on right: 8
+Arith (26)
+    on left: 15 16 17, on right: 9 12 13 14 16 17 27
+Term (27)
+    on left: 18 19 20, on right: 15 16 17 19 20
+Factor (28)
+    on left: 21 22 23 24, on right: 18 19 20
+Print (29)
+    on left: 25 26, on right: 6
+Group (30)
+    on left: 27, on right: 21 25
+
+
+State 0
+
+    0 $accept: . Prog $end
+
+    $default  reduce using rule 1 (Prog)
+
+    Prog  go to state 1
+
+
+State 1
+
+    0 $accept: Prog . $end
+    2 Prog: Prog . Line
+    3     | Prog . Stmt Line
+
+    $end      shift, and go to state 2
+    PRINT     shift, and go to state 3
+    INT       shift, and go to state 4
+    DOUBLE    shift, and go to state 5
+    LB        shift, and go to state 6
+    NUMBER    shift, and go to state 7
+    FLOATNUM  shift, and go to state 8
+    ID        shift, and go to state 9
+    '\n'      shift, and go to state 10
+
+    $end      [reduce using rule 5 (Line)]
+    PRINT     [reduce using rule 5 (Line)]
+    INT       [reduce using rule 5 (Line)]
+    DOUBLE    [reduce using rule 5 (Line)]
+    LB        [reduce using rule 5 (Line)]
+    NUMBER    [reduce using rule 5 (Line)]
+    FLOATNUM  [reduce using rule 5 (Line)]
+    ID        [reduce using rule 5 (Line)]
+    '\n'      [reduce using rule 5 (Line)]
+
+    Line    go to state 11
+    Stmt    go to state 12
+    Decl    go to state 13
+    Assign  go to state 14
+    Arith   go to state 15
+    Term    go to state 16
+    Factor  go to state 17
+    Print   go to state 18
+    Group   go to state 19
+
+
+State 2
+
+    0 $accept: Prog $end .
+
+    $default  accept
+
+
+State 3
+
+   25 Print: PRINT . Group
+   26      | PRINT . LB STRING RB
+
+    LB  shift, and go to state 20
+
+    Group  go to state 21
+
+
+State 4
+
+   10 Decl: INT . ID
+   12     | INT . ID ASSIGN Arith
+
+    ID  shift, and go to state 22
+
+
+State 5
+
+   11 Decl: DOUBLE . ID
+   13     | DOUBLE . ID ASSIGN Arith
+
+    ID  shift, and go to state 23
+
+
+State 6
+
+   27 Group: LB . Arith RB
+
+    LB        shift, and go to state 6
+    NUMBER    shift, and go to state 7
+    FLOATNUM  shift, and go to state 8
+    ID        shift, and go to state 24
+
+    Arith   go to state 25
+    Term    go to state 16
+    Factor  go to state 17
+    Group   go to state 19
+
+
+State 7
+
+   22 Factor: NUMBER .
+
+    $default  reduce using rule 22 (Factor)
+
+
+State 8
+
+   23 Factor: FLOATNUM .
+
+    $default  reduce using rule 23 (Factor)
+
+
+State 9
+
+   14 Assign: ID . ASSIGN Arith
+   24 Factor: ID .
+
+    ASSIGN  shift, and go to state 26
+
+    $default  reduce using rule 24 (Factor)
+
+
+State 10
+
+    4 Line: '\n' .
+
+    $default  reduce using rule 4 (Line)
+
+
+State 11
+
+    2 Prog: Prog Line .
+
+    $default  reduce using rule 2 (Prog)
+
+
+State 12
+
+    3 Prog: Prog Stmt . Line
+
+    '\n'  shift, and go to state 10
+
+    '\n'      [reduce using rule 5 (Line)]
+    $default  reduce using rule 5 (Line)
+
+    Line  go to state 27
+
+
+State 13
+
+    7 Stmt: Decl . SEM
+
+    SEM  shift, and go to state 28
+
+
+State 14
+
+    8 Stmt: Assign . SEM
+
+    SEM  shift, and go to state 29
+
+
+State 15
+
+    9 Stmt: Arith . SEM
+   16 Arith: Arith . ADD Term
+   17      | Arith . SUB Term
+
+    SEM  shift, and go to state 30
+    ADD  shift, and go to state 31
+    SUB  shift, and go to state 32
+
+
+State 16
+
+   15 Arith: Term .
+   19 Term: Term . MUL Factor
+   20     | Term . DIV Factor
+
+    MUL  shift, and go to state 33
+    DIV  shift, and go to state 34
+
+    $default  reduce using rule 15 (Arith)
+
+
+State 17
+
+   18 Term: Factor .
+
+    $default  reduce using rule 18 (Term)
+
+
+State 18
+
+    6 Stmt: Print . SEM
+
+    SEM  shift, and go to state 35
+
+
+State 19
+
+   21 Factor: Group .
+
+    $default  reduce using rule 21 (Factor)
+
+
+State 20
+
+   26 Print: PRINT LB . STRING RB
+   27 Group: LB . Arith RB
+
+    LB        shift, and go to state 6
+    STRING    shift, and go to state 36
+    NUMBER    shift, and go to state 7
+    FLOATNUM  shift, and go to state 8
+    ID        shift, and go to state 24
+
+    Arith   go to state 25
+    Term    go to state 16
+    Factor  go to state 17
+    Group   go to state 19
+
+
+State 21
+
+   25 Print: PRINT Group .
+
+    $default  reduce using rule 25 (Print)
+
+
+State 22
+
+   10 Decl: INT ID .
+   12     | INT ID . ASSIGN Arith
+
+    ASSIGN  shift, and go to state 37
+
+    $default  reduce using rule 10 (Decl)
+
+
+State 23
+
+   11 Decl: DOUBLE ID .
+   13     | DOUBLE ID . ASSIGN Arith
+
+    ASSIGN  shift, and go to state 38
+
+    $default  reduce using rule 11 (Decl)
+
+
+State 24
+
+   24 Factor: ID .
+
+    $default  reduce using rule 24 (Factor)
+
+
+State 25
+
+   16 Arith: Arith . ADD Term
+   17      | Arith . SUB Term
+   27 Group: LB Arith . RB
+
+    RB   shift, and go to state 39
+    ADD  shift, and go to state 31
+    SUB  shift, and go to state 32
+
+
+State 26
+
+   14 Assign: ID ASSIGN . Arith
+
+    LB        shift, and go to state 6
+    NUMBER    shift, and go to state 7
+    FLOATNUM  shift, and go to state 8
+    ID        shift, and go to state 24
+
+    Arith   go to state 40
+    Term    go to state 16
+    Factor  go to state 17
+    Group   go to state 19
+
+
+State 27
+
+    3 Prog: Prog Stmt Line .
+
+    $default  reduce using rule 3 (Prog)
+
+
+State 28
+
+    7 Stmt: Decl SEM .
+
+    $default  reduce using rule 7 (Stmt)
+
+
+State 29
+
+    8 Stmt: Assign SEM .
+
+    $default  reduce using rule 8 (Stmt)
+
+
+State 30
+
+    9 Stmt: Arith SEM .
+
+    $default  reduce using rule 9 (Stmt)
+
+
+State 31
+
+   16 Arith: Arith ADD . Term
+
+    LB        shift, and go to state 6
+    NUMBER    shift, and go to state 7
+    FLOATNUM  shift, and go to state 8
+    ID        shift, and go to state 24
+
+    Term    go to state 41
+    Factor  go to state 17
+    Group   go to state 19
+
+
+State 32
+
+   17 Arith: Arith SUB . Term
+
+    LB        shift, and go to state 6
+    NUMBER    shift, and go to state 7
+    FLOATNUM  shift, and go to state 8
+    ID        shift, and go to state 24
+
+    Term    go to state 42
+    Factor  go to state 17
+    Group   go to state 19
+
+
+State 33
+
+   19 Term: Term MUL . Factor
+
+    LB        shift, and go to state 6
+    NUMBER    shift, and go to state 7
+    FLOATNUM  shift, and go to state 8
+    ID        shift, and go to state 24
+
+    Factor  go to state 43
+    Group   go to state 19
+
+
+State 34
+
+   20 Term: Term DIV . Factor
+
+    LB        shift, and go to state 6
+    NUMBER    shift, and go to state 7
+    FLOATNUM  shift, and go to state 8
+    ID        shift, and go to state 24
+
+    Factor  go to state 44
+    Group   go to state 19
+
+
+State 35
+
+    6 Stmt: Print SEM .
+
+    $default  reduce using rule 6 (Stmt)
+
+
+State 36
+
+   26 Print: PRINT LB STRING . RB
+
+    RB  shift, and go to state 45
+
+
+State 37
+
+   12 Decl: INT ID ASSIGN . Arith
+
+    LB        shift, and go to state 6
+    NUMBER    shift, and go to state 7
+    FLOATNUM  shift, and go to state 8
+    ID        shift, and go to state 24
+
+    Arith   go to state 46
+    Term    go to state 16
+    Factor  go to state 17
+    Group   go to state 19
+
+
+State 38
+
+   13 Decl: DOUBLE ID ASSIGN . Arith
+
+    LB        shift, and go to state 6
+    NUMBER    shift, and go to state 7
+    FLOATNUM  shift, and go to state 8
+    ID        shift, and go to state 24
+
+    Arith   go to state 47
+    Term    go to state 16
+    Factor  go to state 17
+    Group   go to state 19
+
+
+State 39
+
+   27 Group: LB Arith RB .
+
+    $default  reduce using rule 27 (Group)
+
+
+State 40
+
+   14 Assign: ID ASSIGN Arith .
+   16 Arith: Arith . ADD Term
+   17      | Arith . SUB Term
+
+    ADD  shift, and go to state 31
+    SUB  shift, and go to state 32
+
+    $default  reduce using rule 14 (Assign)
+
+
+State 41
+
+   16 Arith: Arith ADD Term .
+   19 Term: Term . MUL Factor
+   20     | Term . DIV Factor
+
+    MUL  shift, and go to state 33
+    DIV  shift, and go to state 34
+
+    $default  reduce using rule 16 (Arith)
+
+
+State 42
+
+   17 Arith: Arith SUB Term .
+   19 Term: Term . MUL Factor
+   20     | Term . DIV Factor
+
+    MUL  shift, and go to state 33
+    DIV  shift, and go to state 34
+
+    $default  reduce using rule 17 (Arith)
+
+
+State 43
+
+   19 Term: Term MUL Factor .
+
+    $default  reduce using rule 19 (Term)
+
+
+State 44
+
+   20 Term: Term DIV Factor .
+
+    $default  reduce using rule 20 (Term)
+
+
+State 45
+
+   26 Print: PRINT LB STRING RB .
+
+    $default  reduce using rule 26 (Print)
+
+
+State 46
+
+   12 Decl: INT ID ASSIGN Arith .
+   16 Arith: Arith . ADD Term
+   17      | Arith . SUB Term
+
+    ADD  shift, and go to state 31
+    SUB  shift, and go to state 32
+
+    $default  reduce using rule 12 (Decl)
+
+
+State 47
+
+   13 Decl: DOUBLE ID ASSIGN Arith .
+   16 Arith: Arith . ADD Term
+   17      | Arith . SUB Term
+
+    ADD  shift, and go to state 31
+    SUB  shift, and go to state 32
+
+    $default  reduce using rule 13 (Decl)

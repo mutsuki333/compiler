@@ -61,7 +61,7 @@ int symnum;											/*The number of the symbol*/
 
 
 /* Token definition */
-%token SEM PRINT WHILE INT DOUBLE LB RB
+%token SEM PRINT WHILE INT DOUBLE LB RB LCB RCB LE GE EQ NE
 %token STRING ADD SUB MUL DIV
 %token ASSIGN NUMBER FLOATNUM ID
 
@@ -74,6 +74,7 @@ int symnum;											/*The number of the symbol*/
   int intNum;
   double doubleNum;
   char *str;
+  int boolean;
 }
 
 /* Type declaration :
@@ -85,9 +86,10 @@ int symnum;											/*The number of the symbol*/
 %type <intNum> NUMBER
 %type <doubleNum> FLOATNUM Arith Group Factor Term Stmt
 %type <str> SEM PRINT WHILE INT DOUBLE LB RB STRING ADD SUB MUL DIV ASSIGN ID
-%type <str> Decl Assign Print Line
+%type <str> Decl Assign Print While
+%type <boolean> Continue
 
-%left ADD SUB MUL DIV
+%left ADD SUB MUL DIV '<' '>' LE GE EQ NE
 
 %%
 
@@ -109,6 +111,24 @@ Stmt
     | Decl SEM
     | Assign SEM
     | Arith SEM
+    | While
+    ;
+
+While
+    : WHILE LB Continue RB Block {printf("End while loop\n");}
+    ;
+
+Block
+    : LCB Prog RCB
+    ;
+
+Continue
+    : Arith '<' Arith         {printf("Start while loop with %.0f < %.0f\n", $1, $3);}
+    | Arith '>' Arith         {printf("Start while loop with %.0f > %.0f\n", $1, $3);}
+    | Arith LE Arith          {printf("Start while loop with %.0f <= %.0f\n", $1, $3);}
+    | Arith GE Arith          {printf("Start while loop with %.0f >= %.0f\n", $1, $3);}
+    | Arith EQ Arith          {printf("Start while loop with %.0f == %.0f\n", $1, $3);}
+    | Arith NE Arith          {printf("Start while loop with %.0f != %.0f\n", $1, $3);}
     ;
 
 Decl

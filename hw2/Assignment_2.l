@@ -37,6 +37,14 @@ space		[ ]
 "*" 							{ return MUL;}
 "/" 							{ return DIV;}
 "=" 							{ return ASSIGN;}
+"{"								{ return LCB;}
+"}"								{ return RCB;}
+"<"								{ return '<';}
+">"								{ return '>';}
+"<="							{ return LE;}
+">="							{ return GE;}
+"=="							{ return EQ;}
+"!="							{ return NE;}
 {sem}							{ return SEM;}
 ([Pp][Rr][Ii][Nn][Tt])			{ return PRINT;}
 ([Ww][Hh][Ii][Ll][Ee])			{ return WHILE;}

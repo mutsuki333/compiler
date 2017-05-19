@@ -17,3 +17,11 @@ int d;
 print(a * c);
 double p = d*2 - 0.14;
 print(p);
+
+
+while(i < 6-4*8){
+  i = i + 1;
+  print(i);
+  i = i * 10;
+  print(6-4*8);
+}

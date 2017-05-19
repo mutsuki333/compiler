@@ -52,15 +52,21 @@ extern int yydebug;
     DOUBLE = 262,
     LB = 263,
     RB = 264,
-    STRING = 265,
-    ADD = 266,
-    SUB = 267,
-    MUL = 268,
-    DIV = 269,
-    ASSIGN = 270,
-    NUMBER = 271,
-    FLOATNUM = 272,
-    ID = 273
+    LCB = 265,
+    RCB = 266,
+    LE = 267,
+    GE = 268,
+    EQ = 269,
+    NE = 270,
+    STRING = 271,
+    ADD = 272,
+    SUB = 273,
+    MUL = 274,
+    DIV = 275,
+    ASSIGN = 276,
+    NUMBER = 277,
+    FLOATNUM = 278,
+    ID = 279
   };
 #endif
 /* Tokens.  */
@@ -71,15 +77,21 @@ extern int yydebug;
 #define DOUBLE 262
 #define LB 263
 #define RB 264
-#define STRING 265
-#define ADD 266
-#define SUB 267
-#define MUL 268
-#define DIV 269
-#define ASSIGN 270
-#define NUMBER 271
-#define FLOATNUM 272
-#define ID 273
+#define LCB 265
+#define RCB 266
+#define LE 267
+#define GE 268
+#define EQ 269
+#define NE 270
+#define STRING 271
+#define ADD 272
+#define SUB 273
+#define MUL 274
+#define DIV 275
+#define ASSIGN 276
+#define NUMBER 277
+#define FLOATNUM 278
+#define ID 279
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -91,8 +103,9 @@ union YYSTYPE
   int intNum;
   double doubleNum;
   char *str;
+  int boolean;
 
-#line 96 "y.tab.h" /* yacc.c:1909  */
+#line 109 "y.tab.h" /* yacc.c:1909  */
 };
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1

@@ -1,0 +1,265 @@
+文法
+
+    0 $accept: lines $end
+
+    1 lines: %empty
+    2      | lines expression '\r' '\n'
+    3      | lines expression '\n'
+
+    4 expression: term
+    5           | expression '+' term
+    6           | expression '-' term
+
+    7 term: factor
+    8     | term '*' factor
+    9     | term '/' factor
+
+   10 factor: NUMBER
+   11       | group
+
+   12 group: '(' expression ')'
+
+
+終結語詞，附有它們出現處的規則
+
+$end (0) 0
+'\n' (10) 2 3
+'\r' (13) 2
+'(' (40) 12
+')' (41) 12
+'*' (42) 8
+'+' (43) 5
+'-' (45) 6
+'/' (47) 9
+error (256)
+NUMBER (258) 10
+
+
+非終結語詞，附有它們出現處的規則
+
+$accept (12)
+    於左側： 0
+lines (13)
+    於左側： 1 2 3,於右側： 0 2 3
+expression (14)
+    於左側： 4 5 6,於右側： 2 3 5 6 12
+term (15)
+    於左側： 7 8 9,於右側： 4 5 6 8 9
+factor (16)
+    於左側： 10 11,於右側： 7 8 9
+group (17)
+    於左側： 12,於右側： 11
+
+
+狀態 0
+
+    0 $accept: . lines $end
+
+    $預設  使用規則 1 以縮減 (lines)
+
+    lines  進入狀態 1
+
+
+狀態 1
+
+    0 $accept: lines . $end
+    2 lines: lines . expression '\r' '\n'
+    3      | lines . expression '\n'
+
+    $end    偏移，並進入狀態 2
+    NUMBER  偏移，並進入狀態 3
+    '('     偏移，並進入狀態 4
+
+    expression  進入狀態 5
+    term        進入狀態 6
+    factor      進入狀態 7
+    group       進入狀態 8
+
+
+狀態 2
+
+    0 $accept: lines $end .
+
+    $預設  接受
+
+
+狀態 3
+
+   10 factor: NUMBER .
+
+    $預設  使用規則 10 以縮減 (factor)
+
+
+狀態 4
+
+   12 group: '(' . expression ')'
+
+    NUMBER  偏移，並進入狀態 3
+    '('     偏移，並進入狀態 4
+
+    expression  進入狀態 9
+    term        進入狀態 6
+    factor      進入狀態 7
+    group       進入狀態 8
+
+
+狀態 5
+
+    2 lines: lines expression . '\r' '\n'
+    3      | lines expression . '\n'
+    5 expression: expression . '+' term
+    6           | expression . '-' term
+
+    '\r'  偏移，並進入狀態 10
+    '\n'  偏移，並進入狀態 11
+    '+'   偏移，並進入狀態 12
+    '-'   偏移，並進入狀態 13
+
+
+狀態 6
+
+    4 expression: term .
+    8 term: term . '*' factor
+    9     | term . '/' factor
+
+    '*'  偏移，並進入狀態 14
+    '/'  偏移，並進入狀態 15
+
+    $預設  使用規則 4 以縮減 (expression)
+
+
+狀態 7
+
+    7 term: factor .
+
+    $預設  使用規則 7 以縮減 (term)
+
+
+狀態 8
+
+   11 factor: group .
+
+    $預設  使用規則 11 以縮減 (factor)
+
+
+狀態 9
+
+    5 expression: expression . '+' term
+    6           | expression . '-' term
+   12 group: '(' expression . ')'
+
+    '+'  偏移，並進入狀態 12
+    '-'  偏移，並進入狀態 13
+    ')'  偏移，並進入狀態 16
+
+
+狀態 10
+
+    2 lines: lines expression '\r' . '\n'
+
+    '\n'  偏移，並進入狀態 17
+
+
+狀態 11
+
+    3 lines: lines expression '\n' .
+
+    $預設  使用規則 3 以縮減 (lines)
+
+
+狀態 12
+
+    5 expression: expression '+' . term
+
+    NUMBER  偏移，並進入狀態 3
+    '('     偏移，並進入狀態 4
+
+    term    進入狀態 18
+    factor  進入狀態 7
+    group   進入狀態 8
+
+
+狀態 13
+
+    6 expression: expression '-' . term
+
+    NUMBER  偏移，並進入狀態 3
+    '('     偏移，並進入狀態 4
+
+    term    進入狀態 19
+    factor  進入狀態 7
+    group   進入狀態 8
+
+
+狀態 14
+
+    8 term: term '*' . factor
+
+    NUMBER  偏移，並進入狀態 3
+    '('     偏移，並進入狀態 4
+
+    factor  進入狀態 20
+    group   進入狀態 8
+
+
+狀態 15
+
+    9 term: term '/' . factor
+
+    NUMBER  偏移，並進入狀態 3
+    '('     偏移，並進入狀態 4
+
+    factor  進入狀態 21
+    group   進入狀態 8
+
+
+狀態 16
+
+   12 group: '(' expression ')' .
+
+    $預設  使用規則 12 以縮減 (group)
+
+
+狀態 17
+
+    2 lines: lines expression '\r' '\n' .
+
+    $預設  使用規則 2 以縮減 (lines)
+
+
+狀態 18
+
+    5 expression: expression '+' term .
+    8 term: term . '*' factor
+    9     | term . '/' factor
+
+    '*'  偏移，並進入狀態 14
+    '/'  偏移，並進入狀態 15
+
+    $預設  使用規則 5 以縮減 (expression)
+
+
+狀態 19
+
+    6 expression: expression '-' term .
+    8 term: term . '*' factor
+    9     | term . '/' factor
+
+    '*'  偏移，並進入狀態 14
+    '/'  偏移，並進入狀態 15
+
+    $預設  使用規則 6 以縮減 (expression)
+
+
+狀態 20
+
+    8 term: term '*' factor .
+
+    $預設  使用規則 8 以縮減 (term)
+
+
+狀態 21
+
+    9 term: term '/' factor .
+
+    $預設  使用規則 9 以縮減 (term)

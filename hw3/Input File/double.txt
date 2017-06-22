@@ -1,0 +1,11 @@
+double a;
+double b = 6.88;
+int i = 10;
+print(b);
+//double can only work with each other
+a = b / 2.0 + 0.12;
+print(a);
+double c = b + b;
+print(c);
+int k = i*(i+i)/(i/2);
+print(k);

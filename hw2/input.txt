@@ -1,0 +1,27 @@
+int a = 5;
+int b = 6*a;
+int c = 0;
+double d;
+int i = 6;
+d = 3.14;
+b = 48/6;
+print(k);
+c = 52/0;
+L = 8;
+int b = 2;
+print(i*1.6);
+a = 4*G;
+c = (19+b)*10;
+double c;
+int d;
+print(a * c);
+double p = d*2 - 0.14;
+print(p);
+
+
+while(i < 100){
+  i = i + 1;
+  print(i);
+  i = i / 10;
+  print(6-4*8);
+}
